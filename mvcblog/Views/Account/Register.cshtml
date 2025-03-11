@@ -1,0 +1,54 @@
+﻿@model RegisterViewModel
+
+<div class='content-section'>
+    <form method='Post' asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">           
+        <fieldset class='form-group'>
+            <legend class='border-bottom mb-4'>Join Today</legend>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class='form-group'>
+                <label class="form-control-label" asp-for="UserName"></label>
+                <input class="form-control form-control-lg" asp-for="UserName">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class='form-group'>
+                <label class="form-control-label" asp-for="Email"></label>
+                <input class="form-control form-control-lg" asp-for="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class='form-group'>
+                <label class="form-control-label" asp-for="Password"></label>
+                <input class="form-control form-control-lg" asp-for="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class='form-group'>
+                <label class="form-control-label" asp-for="ConfirmPassword"></label>
+                <input class="form-control form-control-lg" asp-for="ConfirmPassword">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </fieldset>
+        @* <div class='form-group'> *@
+        @*     <input class="btn btn-outline-info" type="submit"> *@
+        @* </div> *@
+        <button class="btn btn-success form-control" type="submit">
+            Register
+        </button>
+    </form>
+</div>
+<div class='border-top pt-3'>
+    <small class='text-muted'>
+        Already Have An Account? <a class='ml-2' href='/login'>Sign in </a>
+    </small>
+</div>
+
+        
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
