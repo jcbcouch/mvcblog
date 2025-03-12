@@ -11,5 +11,6 @@ namespace mvcblog.Data
         {
         }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Post> Posts { get; set; }
     }
 }

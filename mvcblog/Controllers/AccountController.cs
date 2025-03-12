@@ -63,7 +63,7 @@ namespace mvcblog.Controllers
             return View(model);
         }
 
-        public IActionResult Login(string returnurl = null)
+        public async Task<IActionResult> Login(string returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;
             return View();

@@ -7,9 +7,9 @@
 
     @if (SignInManager.IsSignedIn(User))
     {
-        
 
-            <a class="nav-item nav-link" href="/blogs/create">New Post</a>
+
+        <a class="nav-item nav-link" asp-controller="Home" asp-action="CreatePost">New Post</a>
             <a class="nav-item nav-link" href="/profile">Profile</a>
         <form class="inline" method="POST" asp-controller="Account" asp-action="LogOff">
                 <input type="hidden" >                  <button style="background: none!important;
