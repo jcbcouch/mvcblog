@@ -23,9 +23,19 @@ namespace mvcblog.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View();
+            //List<Post> posts = _db.Posts.Include(u=>u.User).ToList();
+            //return View(posts);
+            int pageSize = 3;
+            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+
+        public async Task<IActionResult> Userposts(string userId)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(userId);
+            List<Post> posts = _db.Posts.Where(l => l.IdentityUserId == user.Id).ToList();
+            return View(posts);
         }
 
         [Authorize]

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Post>
+
+@if (Model.Count() > 0)
+{
+    @foreach (var post in Model)
+    {
+                <article class="media content-section">
+                    <img class="rounded-circle article-img" src="~/images/default.jpg" alt="" />
+                    <div class="media-body">
+                        <div class="article-metadata">
+                            <a class="mr-2">@post.User.Email</a>
+                            <small class="text-muted">2025-01-20 23:37:03</small>
+                        </div>
+                        <h2><a class="article-title" href="/blogs/8">@post.Title</a></h2>
+                        <p class="article-content">
+                    @post.Body
+                        </p>
+                    </div>
+                </article>
+    }
+}
+else
+{
+        <p>No posts exists...</p>
+}
