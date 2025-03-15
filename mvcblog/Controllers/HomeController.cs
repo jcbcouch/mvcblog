@@ -31,11 +31,16 @@ namespace mvcblog.Controllers
             return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        public async Task<IActionResult> Userposts(string userId)
+        public async Task<IActionResult> Userposts(string userId, int? pageNumber)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            List<Post> posts = _db.Posts.Where(l => l.IdentityUserId == user.Id).ToList();
-            return View(posts);
+            //List<Post> posts = _db.Posts.Where(l => l.IdentityUserId == user.Id).ToList();
+            //return View(posts);
+            int pageSize = 3;
+            string userid = user.Id;
+            ViewBag.userid = userid;
+            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Where(l => l.IdentityUserId == user.Id)
+                .Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         [Authorize]
