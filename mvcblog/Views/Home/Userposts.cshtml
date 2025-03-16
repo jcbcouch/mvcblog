@@ -11,7 +11,7 @@
                             <a class="mr-2">@post.User.Email</a>
                             <small class="text-muted">2025-01-20 23:37:03</small>
                         </div>
-                        <h2><a class="article-title" href="/blogs/8">@post.Title</a></h2>
+                            <h2><a class="article-title" asp-action="Post" asp-route-postId="@post.Id">@post.Title</a></h2>
                         <p class="article-content">
                     @post.Body
                         </p>

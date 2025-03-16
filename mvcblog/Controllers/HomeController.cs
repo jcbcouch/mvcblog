@@ -28,7 +28,8 @@ namespace mvcblog.Controllers
             //List<Post> posts = _db.Posts.Include(u=>u.User).ToList();
             //return View(posts);
             int pageSize = 3;
-            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Include(u => u.User)
+                .AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         public async Task<IActionResult> Userposts(string userId, int? pageNumber)
@@ -42,6 +43,21 @@ namespace mvcblog.Controllers
             return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Where(l => l.IdentityUserId == user.Id)
                 .Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
         }
+
+        public async Task<IActionResult> Post(int postId)
+        {
+            if (postId == 0)
+            {
+                return BadRequest();
+            }
+            Post post = await _db.Posts.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return View(post);
+        }
+
 
         [Authorize]
         public async Task<IActionResult> CreatePost()
