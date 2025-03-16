@@ -74,6 +74,7 @@ namespace mvcblog.Controllers
             {
                 Title = submitData.Title,
                 Body = submitData.Body,
+                PostDate = System.DateTime.Now,
                 IdentityUserId = submitData.IdentityUserId
             };
             await _db.Posts.AddAsync(postObj);

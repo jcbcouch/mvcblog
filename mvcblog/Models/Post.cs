@@ -13,6 +13,7 @@ namespace mvcblog.Models
         public string Title { get; set; }
         [Required]
         public string Body { get; set; }
+        public DateTime PostDate { get; set; }
 
         [Required]
         public string? IdentityUserId { get; set; }
