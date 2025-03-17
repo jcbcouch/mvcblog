@@ -6,6 +6,7 @@ namespace mvcblog.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public string ImagePath { get; set; }
         [NotMapped]
         public string RoleId { get; set; }
         [NotMapped]

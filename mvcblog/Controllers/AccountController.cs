@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using mvcblog.Models.ViewModels;
 using mvcblog.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.Reflection;
 
 namespace mvcblog.Controllers
 {
@@ -12,12 +14,16 @@ namespace mvcblog.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public AccountController(UserManager<ApplicationUser> userManager, 
+                                 SignInManager<ApplicationUser> signInManager,
+                                 RoleManager<IdentityRole> roleManager,
+                                 IWebHostEnvironment webHostEnvironment)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -41,23 +47,54 @@ namespace mvcblog.Controllers
             returnurl = returnurl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                if (model.Image != null)
                 {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                };
+                    string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+                    string fileName = model.Image.FileName;
+                    string filePath = Path.Combine(uploadDir, fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.Image.CopyTo(fileStream);
+                    }
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        ImagePath = fileName
+                    };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
 
-                    await _userManager.AddToRoleAsync(user, SD.User);
+                        await _userManager.AddToRoleAsync(user, SD.User);
+                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnurl);
+
+
+                    AddErrors(result);
                 }
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return LocalRedirect(returnurl);
+                else 
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email
+                    };
+
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+
+                        await _userManager.AddToRoleAsync(user, SD.User);
+                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnurl);
 
 
-                AddErrors(result);
+                    AddErrors(result);
+                }
             }
 
             return View(model);

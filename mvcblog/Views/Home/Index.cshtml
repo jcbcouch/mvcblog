@@ -5,7 +5,13 @@
     @foreach (var post in Model)
     {
         <article class="media content-section">
-            <img class="rounded-circle article-img" src="~/images/default.jpg" alt="" />
+            @if (string.IsNullOrEmpty(post.User.ImagePath)) {
+                <img class="rounded-circle article-img" src="~/images/default.jpg" alt="" />
+            }
+            @if (!string.IsNullOrEmpty(post.User.ImagePath))
+            {
+                <img class="rounded-circle article-img" src="~/images/@post.User.ImagePath" alt="" />
+            }
             <div class="media-body">
                 <div class="article-metadata">
                     <a class="mr-2" asp-action="Userposts" asp-route-userId="@post.User.Id">@post.User.Email</a>

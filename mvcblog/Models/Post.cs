@@ -19,6 +19,6 @@ namespace mvcblog.Models
         public string? IdentityUserId { get; set; }
         [ForeignKey("IdentityUserId")]
         [ValidateNever]
-        public IdentityUser? User { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }

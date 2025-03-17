@@ -23,6 +23,8 @@ namespace mvcblog.Models.ViewModels
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        public IFormFile? Image { get; set; }
+
         //public IEnumerable<SelectListItem>? RoleList { get; set; }
         //[Display(Name = "Role")]
         //public string RoleSelected { get; set; }

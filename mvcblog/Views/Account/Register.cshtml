@@ -1,7 +1,7 @@
 ﻿@model RegisterViewModel
 
 <div class='content-section'>
-    <form method='Post' asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">           
+    <form method='Post' asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" enctype="multipart/form-data">
         <fieldset class='form-group'>
             <legend class='border-bottom mb-4'>Join Today</legend>
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -28,6 +28,12 @@
                 <label class="form-control-label" asp-for="ConfirmPassword"></label>
                 <input class="form-control form-control-lg" asp-for="ConfirmPassword">
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class='form-group'>
+                <label class="form-control-label" asp-for="Image"></label>
+                <input class="form-control form-control-lg" asp-for="Image" accept="image/*">
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
         </fieldset>
         @* <div class='form-group'> *@
