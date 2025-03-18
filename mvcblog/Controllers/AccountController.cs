@@ -50,7 +50,7 @@ namespace mvcblog.Controllers
                 if (model.Image != null)
                 {
                     string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
-                    string fileName = model.Image.FileName;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.Image.FileName);
                     string filePath = Path.Combine(uploadDir, fileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
