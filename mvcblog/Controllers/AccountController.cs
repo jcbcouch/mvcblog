@@ -39,6 +39,42 @@ namespace mvcblog.Controllers
             return View(registerViewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Registeradmin()
+        {
+            RegisterViewModel registerViewModel = new();
+            return View(registerViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Registeradmin(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email
+                    };
+
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+
+                        await _userManager.AddToRoleAsync(user, SD.Admin);
+                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
+
+
+                AddErrors(result);
+                
+            }
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnurl = null)
