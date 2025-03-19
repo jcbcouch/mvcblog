@@ -3,45 +3,48 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using mvcblog.Data;
 using mvcblog.Models;
-using mvcblog.Models.ViewModels;
+using mvcblog.Services;
 
 namespace mvcblog.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IPostService _postService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger, 
+                              UserManager<ApplicationUser> userManager,
+                              IPostService postService)
         {
             _logger = logger;
-            _db = db;
             _userManager = userManager;
+            _postService = postService;
         }
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            //List<Post> posts = _db.Posts.Include(u=>u.User).ToList();
-            //return View(posts);
             int pageSize = 3;
-            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Include(u => u.User)
-                .AsNoTracking(), pageNumber ?? 1, pageSize));
+            List<Post> posts = await PaginatedList<Post>.CreateAsync(_postService.GetAllPostsWithUsers(), pageNumber ?? 1, pageSize);
+            return View(posts);
         }
 
         public async Task<IActionResult> Userposts(string userId, int? pageNumber)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest();
+            }
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            //List<Post> posts = _db.Posts.Where(l => l.IdentityUserId == user.Id).ToList();
-            //return View(posts);
+            if (user == null)
+            {
+                return NotFound();
+            }
             int pageSize = 3;
-            string userid = user.Id;
-            ViewBag.userid = userid;
-            return View(await PaginatedList<Post>.CreateAsync(_db.Posts.Where(l => l.IdentityUserId == user.Id)
-                .Include(u => u.User).AsNoTracking(), pageNumber ?? 1, pageSize));
+            ViewBag.userid = user.Id;
+            List<Post> posts = await PaginatedList<Post>.CreateAsync(_postService.GetAllPostsOfUser(user.Id), pageNumber ?? 1, pageSize);
+            return View(posts);
         }
 
         public async Task<IActionResult> Post(int postId)
@@ -50,7 +53,7 @@ namespace mvcblog.Controllers
             {
                 return BadRequest();
             }
-            Post post = await _db.Posts.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == postId);
+            Post post = await _postService.GetPostWithUser(postId);
             if (post == null)
             {
                 return NotFound();
@@ -67,9 +70,9 @@ namespace mvcblog.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> CreatePost(Post submitData)
         {
-            //ApplicationUser user = await _userManager.FindByIdAsync(submitData.IdentityUserId);
             var postObj = new Post
             {
                 Title = submitData.Title,
@@ -77,17 +80,11 @@ namespace mvcblog.Controllers
                 PostDate = System.DateTime.Now,
                 IdentityUserId = submitData.IdentityUserId
             };
-            await _db.Posts.AddAsync(postObj);
-            await _db.SaveChangesAsync();
+            await _postService.AddPost(postObj);
 
             return RedirectToAction("Index", "Home");
         }
 
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

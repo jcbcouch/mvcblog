@@ -12,7 +12,7 @@
     }
     <div class="media-body">
         <div class="article-metadata">
-            <a class="mr-2" asp-action="Userposts" asp-route-userId="@Model.User.Id">@Model.User.Email</a>
+            <a class="mr-2" asp-action="Userposts" asp-route-userId="@Model.User.Id">@Model.User.UserName</a>
             <small class="text-muted">@Model.PostDate</small>
         </div>
         <h2><a class="article-title">@Model.Title</a></h2>

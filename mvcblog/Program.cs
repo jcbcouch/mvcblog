@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using mvcblog.Data;
 using mvcblog.Models;
+using mvcblog.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.Configure<IdentityOptions>(opt =>
     opt.Password.RequireNonAlphanumeric = false;
 
 });
+
+builder.Services.AddScoped<IPostService, PostService>();
 
 var app = builder.Build();
 
