@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace mvcblog.Models.ViewModels
@@ -22,7 +23,7 @@ namespace mvcblog.Models.ViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
+        [DisplayName("Profile Picture - optional")]
         public IFormFile? Image { get; set; }
 
         //public IEnumerable<SelectListItem>? RoleList { get; set; }

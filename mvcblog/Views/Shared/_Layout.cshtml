@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no" />
     <title>@ViewData["Title"] - authmvc</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -35,10 +35,14 @@
     <main role="main" class="container">
         <div class="row">
             <div class="col-md-8">
+                <br />
+                <br />
+                <br />
                 @RenderBody()
             </div>
 
-            <div class="col-md-4">
+            
+            @* <div class="col-md-4">
                 <div class="content-section">
                     <h3>Our Sidebar</h3>
                     <p class='text-muted'>
@@ -50,7 +54,7 @@
                         </ul>
                     </p>
                 </div>
-            </div>
+            </div> *@
         </div>
     </main>
 
