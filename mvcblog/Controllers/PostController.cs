@@ -8,13 +8,13 @@ using mvcblog.Services;
 
 namespace mvcblog.Controllers
 {
-    public class HomeController : Controller
+    public class PostController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PostController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPostService _postService;
 
-        public HomeController(ILogger<HomeController> logger, 
+        public PostController(ILogger<PostController> logger, 
                               UserManager<ApplicationUser> userManager,
                               IPostService postService)
         {
@@ -82,7 +82,7 @@ namespace mvcblog.Controllers
             };
             await _postService.AddPost(postObj);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Post");
         }
 
 

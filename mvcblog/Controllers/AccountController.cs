@@ -65,7 +65,7 @@ namespace mvcblog.Controllers
                         await _userManager.AddToRoleAsync(user, SD.Admin);
                     }
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Post");
 
 
                 AddErrors(result);
@@ -172,7 +172,13 @@ namespace mvcblog.Controllers
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Post");
+        }
+
+        [HttpGet]
+        public IActionResult NoAccess()
+        {
+            return View();
         }
 
         private void AddErrors(IdentityResult result)

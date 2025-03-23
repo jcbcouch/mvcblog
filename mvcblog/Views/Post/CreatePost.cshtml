@@ -3,7 +3,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <div class="content-section">
-    <form method="POST" asp-controller="Home" asp-action="CreatePost">
+    <form method="POST" asp-controller="Post" asp-action="CreatePost">
         <input type="hidden" asp-for="IdentityUserId" class="form-control" value="@UserManager.GetUserId(User)" />
             <legend class="border-bottom mb-4">New Post</legend>
         <div class='form-group'>
