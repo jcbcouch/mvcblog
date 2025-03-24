@@ -50,6 +50,11 @@ namespace mvcblog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registeradmin(RegisterViewModel model)
         {
+            var users = await _userManager.GetUsersInRoleAsync(SD.Admin);
+            if (users.Count > 0) 
+            {
+                return RedirectToAction("Index", "Post");
+            }
             if (ModelState.IsValid)
             {
                     var user = new ApplicationUser
